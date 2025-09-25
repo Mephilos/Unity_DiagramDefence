@@ -11,6 +11,8 @@ public class ShapeData : ScriptableObject
     public ProjectileData projectileData;
     public float fireRate = 1f; // 초당 발사 횟수
 
+    [Header("회전 속도")]
+    public float rotationSpeed = 30f;
     [Header("외형 프리팹")]
     public GameObject shapePrefab;
 }

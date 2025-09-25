@@ -16,4 +16,5 @@ MonoBehaviour:
   description: "\uAE30\uBCF8\uC801\uC778 \uD0C4 \uBC1C\uC0AC\uB97C \uD558\uB294 \uB3C4\uD615\uC785\uB2C8\uB2E4."
   projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
   fireRate: 4
+  rotationSpeed: 0
   shapePrefab: {fileID: 7767936498651578959, guid: ab3ddcc6b067e4d5db5b0ebb1ac68545, type: 3}

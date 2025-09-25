@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class PlayerTowerController : MonoBehaviour
 {
+    [Header("타워 설정")]
+    public TowerData towerData;
+
     [Header("플레이어 HP")]
     public float maxHp = 100f;
 
@@ -20,7 +23,7 @@ public class PlayerTowerController : MonoBehaviour
     public List<ShapeData> testPerkOptions;
 
     private bool _isLevelUpSelectionActive = false; // 레벨업 퍽 선택 창 활성화 판별 플래그
-    private int _equippedWeaponCount = 0; // 장착된 무기 카운트
+    private int _equippedShapeCount = 0; // 장착된 도형 카운트
 
     [Header("레벨, 요구 경험치")]
     [SerializeField] private int level = 1;
@@ -74,8 +77,12 @@ public class PlayerTowerController : MonoBehaviour
         if (turretWeapon != null)
         {
             // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
-            turretWeapon.Initialize(defaultTurretData);
-            _equippedWeaponCount = 1;
+            turretWeapon.Initialize(
+                defaultTurretData.projectileData,
+                defaultTurretData.projectileData.damage,
+                defaultTurretData.fireRate
+            );
+            _equippedShapeCount = 0;
         }
     }
 
@@ -153,22 +160,42 @@ public class PlayerTowerController : MonoBehaviour
 
     private void EquipShape(ShapeData shapeData)
     {
+        // 장착가능 슬롯에서 터렛 제외
+        int availableSlots = weaponSlots.Count - 1;
         // 장착한 슬롯 확인
-        if (_equippedWeaponCount >= weaponSlots.Count)
+        if (_equippedShapeCount >= availableSlots)
         {
             Debug.LogWarning("무기 슬롯 풀");
             return;
         }
+        int slotIndex = _equippedShapeCount + 1; // 터렛 제외
         // 빈 슬롯 가져오기
-        Transform slot = weaponSlots[_equippedWeaponCount];
+        Transform slot = weaponSlots[slotIndex];
+
+        FloorBouns bouns = towerData.floorBouns[_equippedShapeCount];
+
+        float finalDamage = shapeData.projectileData.damage * bouns.damageMultiplier;
+        float finalFireRate = shapeData.fireRate * bouns.fireRateMultiplier;
+
         // 해당 슬롯에 무기의 프리팹을 생성
         if (shapeData.shapePrefab != null)
         {
-            Instantiate(shapeData.shapePrefab, slot.position, slot.rotation, slot);
+            GameObject shapeInstance = Instantiate(shapeData.shapePrefab, slot.position, slot.rotation, slot);
+            shapeInstance.transform.localScale = new Vector3(
+                                                             shapeInstance.transform.localScale.x * bouns.visualScale,
+                                                             0.1f,
+                                                             shapeInstance.transform.localScale.z * bouns.visualScale
+                                                            );
+            // 장착된 도형퍽이 회전 할지 말지 확인 후 회전 작동
+            if (shapeData.rotationSpeed != 0f)
+            {
+                float finalRotationSpeed = shapeData.rotationSpeed * bouns.rotationSpeedMultiplier;
+                ShapeRotator rotator = shapeInstance.AddComponent<ShapeRotator>();
+                rotator.Initialize(finalRotationSpeed);
+            }
         }
         // 기존의 컨트롤러가 존제하면 가져옴
         WeaponController newWeapon = slot.GetComponent<WeaponController>();
-
         // 없을 경우
         if (newWeapon == null)
         {
@@ -176,9 +203,9 @@ public class PlayerTowerController : MonoBehaviour
             newWeapon = slot.gameObject.AddComponent<WeaponController>();
         }
         // WeaponController에 도형 데이터 추가 및 초기화
-        newWeapon.Initialize(shapeData);
+        newWeapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate);
         // 장착했으니 슬롯 번호 증가.
-        _equippedWeaponCount++;
+        _equippedShapeCount++;
     }
     void Die()
     {

@@ -3,16 +3,18 @@ using UnityEngine;
 public class WeaponController : MonoBehaviour
 {
     private ProjectileData _projectileData;
-    private float _fireRate = 3f; // 초당 발사 속도
+    private float _finalDamage;
+    private float _finalFireRate;
 
     private float _fireCooldown = 0f;
 
     // 무기 데이타 초기화
-    public void Initialize(ShapeData data)
+    public void Initialize(ProjectileData projectileData, float finalDamage, float finalFireRate)
     {
-        _projectileData = data.projectileData;
-        _fireRate = data.fireRate;
-        _fireCooldown = 3f / _fireRate;
+        _projectileData = projectileData;
+        _finalDamage = finalDamage;
+        _finalFireRate = finalFireRate;
+        _fireCooldown = 0f;
     }
 
     void Update()
@@ -24,17 +26,13 @@ public class WeaponController : MonoBehaviour
         if (_fireCooldown <= 0f)
         {
             Fire();
-            _fireCooldown = 1f / _fireRate;
+            _fireCooldown = 1f / _finalFireRate;
         }
     }
 
     void Fire()
     {
-        if (_projectileData == null || _projectileData.projectilePrefab == null)
-        {
-            Debug.LogWarning($"[{gameObject}] 투사체 데이터, 프리팹 설정 확인");
-            return;
-        }
+        if (_projectileData.projectilePrefab == null) return;
         // 투사체 프리팹 생성
         GameObject projectileObj = Instantiate(_projectileData.projectilePrefab, transform.position, transform.rotation);
         // 생성한 투사체에서 스크립트를 가져옴
@@ -42,7 +40,7 @@ public class WeaponController : MonoBehaviour
         if (projectile != null)
         {   
             // 가져온 데이터로 초기화
-            projectile.Initialize(_projectileData);
+            projectile.Initialize(_projectileData, _finalDamage);
         }
     }
 }

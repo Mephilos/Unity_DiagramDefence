@@ -6,16 +6,9 @@ public class Projectile : MonoBehaviour
     private float _speed;
     private float _lifetime;
 
-    private Rigidbody _rb;
-
-    void Awake()
+    public void Initialize(ProjectileData data, float finalDamage)
     {
-        _rb = GetComponent<Rigidbody>();
-    }
-
-    public void Initialize(ProjectileData data)
-    {
-        _damage = data.damage;
+        _damage = finalDamage;
         _speed = data.speed;
         _lifetime = data.lifetime;
 
@@ -25,11 +18,6 @@ public class Projectile : MonoBehaviour
     void Update()
     {
         transform.Translate(Vector3.forward * _speed * Time.deltaTime);
-    }
-
-    void FixedUpdate()
-    {
-       // _rb.linearVelocity = transform.forward * _speed;
     }
 
     void OnTriggerEnter(Collider other)

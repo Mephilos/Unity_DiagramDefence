@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 89c71f8f9e2044d47ae8c12092f14cec, type: 3}
+  m_Name: Default Tower Data
+  m_EditorClassIdentifier: 
+  towerName: "\uAE30\uBCF8"
+  floorBouns:
+  - damageMultiplier: 1.5
+    fireRateMultiplier: 0.8
+    visualScale: 1.5
+    rotationSpeedMultiplier: 0.8
+  - damageMultiplier: 1.2
+    fireRateMultiplier: 1
+    visualScale: 1.2
+    rotationSpeedMultiplier: -1
+  - damageMultiplier: 1
+    fireRateMultiplier: 1.2
+    visualScale: 1
+    rotationSpeedMultiplier: 1.2
+  - damageMultiplier: 0.8
+    fireRateMultiplier: 1.5
+    visualScale: 0.8
+    rotationSpeedMultiplier: -1.5
