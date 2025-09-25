@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class PlayerTowerController : MonoBehaviour
@@ -9,6 +10,23 @@ public class PlayerTowerController : MonoBehaviour
     public Transform turretTransform; // 터렛 부분
     public LayerMask groundLayerMask;
 
+    [Header("무기 시스템 설정")]
+    [Tooltip("무기 장착 리스트")]
+    public List<Transform> weaponSlots;
+
+    [Tooltip("터렛 데이터")]
+    public ShapeData defaultTurretData;
+    [Tooltip("테스트용")]
+    public List<ShapeData> testPerkOptions;
+
+    private bool _isLevelUpSelectionActive = false; // 레벨업 퍽 선택 창 활성화 판별 플래그
+    private int _equippedWeaponCount = 0; // 장착된 무기 카운트
+
+    [Header("레벨, 요구 경험치")]
+    [SerializeField] private int level = 1;
+    [SerializeField] private float currentExperience = 0f;
+    [SerializeField] private float requiredExperience = 100f;
+
     private float _currentHp;
     private Camera _mainCamera;
 
@@ -19,11 +37,46 @@ public class PlayerTowerController : MonoBehaviour
 
         if (turretTransform == null) Debug.LogError($"[{gameObject}] 터렛 트렌스폼 설정 필요");
 
+        InitializeDefaultTurret();
     }
 
     void Update()
     {
-        HandleTurretRotation();
+        if (_isLevelUpSelectionActive)
+        {
+            HandlePerkSelection();
+        }
+        else
+        {
+            HandleTurretRotation();
+        }
+    }
+
+    public void TakeDamage(float damage)
+    {
+        _currentHp -= damage;
+        Debug.LogWarning($"플레이어 hp 감소: {_currentHp} / {maxHp}");
+
+        if (_currentHp <= 0)
+        {
+            Die();
+        }
+    }
+    private void InitializeDefaultTurret()
+    {
+        if (weaponSlots.Count == 0 || defaultTurretData == null)
+        {
+            Debug.LogError($"{gameObject}터렛 설정 필요");
+            return;
+        }
+        // 0번슬롯은 터렛 거기에 있는 터렛의 웨폰컨트롤러 가져오기
+        WeaponController turretWeapon = weaponSlots[0].GetComponent<WeaponController>();
+        if (turretWeapon != null)
+        {
+            // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
+            turretWeapon.Initialize(defaultTurretData);
+            _equippedWeaponCount = 1;
+        }
     }
 
     void HandleTurretRotation()
@@ -48,15 +101,84 @@ public class PlayerTowerController : MonoBehaviour
         }
     }
 
-    public void TakeDamage(float damage)
+    // 경험치 획득
+    public void GainExperience(float amount)
     {
-        _currentHp -= damage;
-        Debug.LogWarning($"플레이어 hp 감소: {_currentHp} / {maxHp}");
+        currentExperience += amount;
+        Debug.Log($"[{gameObject}] 경험치 획득 {amount} / 현재 경험치: {currentExperience} / {requiredExperience}");
 
-        if (_currentHp <= 0)
+        while (currentExperience >= requiredExperience)
         {
-            Die();
+            LevelUp();
         }
+    }
+
+    private void LevelUp()
+    {
+        currentExperience -= requiredExperience; // 현재 경험치에서 이전 레벨의 필요 경험치 만큼 빼서 남은 경험치는 보존되도록
+        level++;
+
+        requiredExperience *= 1.2f; // 요구 경험치 증가를 위한 요구 경험치 증가 계수
+
+        Debug.LogWarning($"레벨 업. 현재 레벨: {level} / 다음 레벨 요구 경험치: {requiredExperience}");
+
+        // 퍽 선택 플래그 온
+        _isLevelUpSelectionActive = true;
+        Time.timeScale = 0f; // 게임 시간 정지
+
+        // 임시로 ui 대체 할 디버그 로그
+        Debug.Log("도형 선택 1 2 3 4");
+        for (int i = 0; i < testPerkOptions.Count; i++)
+        {
+            Debug.Log($"[{i + 1}] {testPerkOptions[i].shapeName}: {testPerkOptions[i].description}");
+        }
+    }
+
+    private void HandlePerkSelection()
+    {
+        if (Input.GetKeyDown(KeyCode.Alpha1) && testPerkOptions.Count >= 1)      SelectPerk(testPerkOptions[0]);
+        else if (Input.GetKeyDown(KeyCode.Alpha2) && testPerkOptions.Count >= 2) SelectPerk(testPerkOptions[1]);
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 3) SelectPerk(testPerkOptions[2]);
+        else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 4) SelectPerk(testPerkOptions[3]);
+    }
+
+    private void SelectPerk(ShapeData selectShape)
+    {
+        Debug.Log($"{selectShape.shapeName} 선택");
+        EquipShape(selectShape);
+
+        _isLevelUpSelectionActive = false;
+        Time.timeScale = 1f;
+    }
+
+    private void EquipShape(ShapeData shapeData)
+    {
+        // 장착한 슬롯 확인
+        if (_equippedWeaponCount >= weaponSlots.Count)
+        {
+            Debug.LogWarning("무기 슬롯 풀");
+            return;
+        }
+        // 빈 슬롯 가져오기
+        Transform slot = weaponSlots[_equippedWeaponCount];
+        // 해당 슬롯에 무기의 프리팹을 생성
+        if (shapeData.shapePrefab != null)
+        {
+            Instantiate(shapeData.shapePrefab, slot.position, slot.rotation, slot);
+        }
+        // 기존의 컨트롤러가 존제하면 가져옴
+        WeaponController newWeapon = slot.GetComponent<WeaponController>();
+
+        // 없을 경우
+        if (newWeapon == null)
+        {
+            // 해당되는 슬롯에 WeaponController 추가
+            newWeapon = slot.gameObject.AddComponent<WeaponController>();
+        }
+        // WeaponController에 도형 데이터 추가 및 초기화
+        newWeapon.Initialize(shapeData);
+        // 장착했으니 슬롯 번호 증가.
+        _equippedWeaponCount++;
     }
     void Die()
     {
