@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 095e071db0c564a8291d4246de0aa597, type: 3}
+  m_Name: DD_Pantagon
+  m_EditorClassIdentifier: 
+  shapeName: Pantagon
+  description: "\uAE30\uBCF8\uC801\uC778 \uD0C4 \uBC1C\uC0AC\uB97C \uD558\uB294 \uB3C4\uD615\uC785\uB2C8\uB2E4."
+  projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
+  fireRate: 1
+  firingStrategy: {fileID: 0}
+  rotationSpeed: 0
+  shapePrefab: {fileID: 7745245748974334351, guid: b76909c1ba4a7483c8d982961899abbc, type: 3}

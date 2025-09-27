@@ -76,11 +76,14 @@ public class PlayerTowerController : MonoBehaviour
         WeaponController turretWeapon = weaponSlots[0].GetComponent<WeaponController>();
         if (turretWeapon != null)
         {
+            List<Transform> turretFirePoints = new List<Transform> { weaponSlots[0] };
             // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
             turretWeapon.Initialize(
                 defaultTurretData.projectileData,
                 defaultTurretData.projectileData.damage,
-                defaultTurretData.fireRate
+                defaultTurretData.fireRate,
+                turretFirePoints,
+                defaultTurretData.firingStrategy
             );
             _equippedShapeCount = 0;
         }
@@ -171,12 +174,13 @@ public class PlayerTowerController : MonoBehaviour
         int slotIndex = _equippedShapeCount + 1; // 터렛 제외
         // 빈 슬롯 가져오기
         Transform slot = weaponSlots[slotIndex];
-
+        // 플로어 보너스 가져오기
         FloorBouns bouns = towerData.floorBouns[_equippedShapeCount];
 
         float finalDamage = shapeData.projectileData.damage * bouns.damageMultiplier;
         float finalFireRate = shapeData.fireRate * bouns.fireRateMultiplier;
-
+        // 총구위치를 저장할 리스트
+        List<Transform> shapeFirePoints = new List<Transform>();
         // 해당 슬롯에 무기의 프리팹을 생성
         if (shapeData.shapePrefab != null)
         {
@@ -193,7 +197,20 @@ public class PlayerTowerController : MonoBehaviour
                 ShapeRotator rotator = shapeInstance.AddComponent<ShapeRotator>();
                 rotator.Initialize(finalRotationSpeed);
             }
+
+            ShapeInfo shapeInfo = shapeInstance.GetComponent<ShapeInfo>();
+            if (shapeInfo != null)
+            {
+                shapeFirePoints = shapeInfo.firePoints;
+            }
         }
+        
+        if (shapeFirePoints.Count == 0)
+        {
+            Debug.LogWarning($"[{gameObject}] 도형 총구 위치 설정 필요");
+            return;
+        }
+
         // 기존의 컨트롤러가 존제하면 가져옴
         WeaponController newWeapon = slot.GetComponent<WeaponController>();
         // 없을 경우
@@ -203,7 +220,7 @@ public class PlayerTowerController : MonoBehaviour
             newWeapon = slot.gameObject.AddComponent<WeaponController>();
         }
         // WeaponController에 도형 데이터 추가 및 초기화
-        newWeapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate);
+        newWeapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, shapeFirePoints, shapeData.firingStrategy);
         // 장착했으니 슬롯 번호 증가.
         _equippedShapeCount++;
     }
