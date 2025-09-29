@@ -6,10 +6,10 @@ public class Projectile : MonoBehaviour
     private float _speed;
     private float _lifetime;
 
-    public void Initialize(ProjectileData data, float finalDamage)
+    public void Initialize(ProjectileData data, float finalDamage, float finalSpeed)
     {
         _damage = finalDamage;
-        _speed = data.speed;
+        _speed = finalSpeed;
         _lifetime = data.lifetime;
 
         Destroy(gameObject, _lifetime);

@@ -40,4 +40,28 @@ public class DamageCalculatingTest
         float actualDamageTier4 = projectileData.damage * towerData.floorBouns[3].damageMultiplier;
         Assert.AreEqual(expectedDamageTier4, actualDamageTier4, "4층 데미지 계산 오류");
     }
-} 
+
+    [Test]
+    public void ShotgunStratege_PelletDamageTest()
+    {
+        float totalDamage = 100f;
+        int pelletCount = 5;
+
+        float actualDamagePerPellet = ShotgunFireStrategy.CalculateDamagePerPellet(totalDamage, pelletCount);
+        float expectedDamagePerPellet = 20f;
+
+        Assert.AreEqual(expectedDamagePerPellet, actualDamagePerPellet, "산탄 데미지 분배 이상");
+    }
+
+    [Test]
+    public void ShotgunStratege_Zero()
+    {
+        float totalDamage = 100f;
+        int pelletCount = 0;
+
+        float actualDamagePerPellet = ShotgunFireStrategy.CalculateDamagePerPellet(totalDamage, pelletCount);
+
+        float expectedDamagePerPellet = 0f;
+        Assert.AreEqual(expectedDamagePerPellet, actualDamagePerPellet, "펠릿 0 데미지 이상");
+    }
+}

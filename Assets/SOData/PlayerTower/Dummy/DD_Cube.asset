@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   shapeName: Cube
   description: "\uAE30\uBCF8\uC801\uC778 \uD0C4 \uBC1C\uC0AC\uB97C \uD558\uB294 \uB3C4\uD615\uC785\uB2C8\uB2E4."
-  projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
-  fireRate: 6
-  firingStrategy: {fileID: 11400000, guid: 530ddc27d00984990bdd521fafd347d1, type: 2}
+  projectileData: {fileID: 11400000, guid: aebda850207b14e0aa6c4c45abe87bdc, type: 2}
+  fireRate: 0.8
+  firingStrategy: {fileID: 11400000, guid: 5cf1fe02d9d1d48589529313e5d0250d, type: 2}
   rotationSpeed: 30
   shapePrefab: {fileID: 1268742667888613154, guid: c8f17bd2b1f6c4a768a0c5f73e3ff307, type: 3}
