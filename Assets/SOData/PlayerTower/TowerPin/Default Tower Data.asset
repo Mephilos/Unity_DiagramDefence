@@ -21,12 +21,12 @@ MonoBehaviour:
   - damageMultiplier: 1.2
     fireRateMultiplier: 1
     visualScale: 1.2
-    rotationSpeedMultiplier: -1
+    rotationSpeedMultiplier: -1.2
   - damageMultiplier: 1
     fireRateMultiplier: 1.2
     visualScale: 1
-    rotationSpeedMultiplier: 1.2
+    rotationSpeedMultiplier: 1.6
   - damageMultiplier: 0.8
     fireRateMultiplier: 1.5
     visualScale: 0.8
-    rotationSpeedMultiplier: -1.5
+    rotationSpeedMultiplier: -2

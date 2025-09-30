@@ -20,10 +20,10 @@ public class PlayerTowerController : MonoBehaviour
     [Tooltip("터렛 데이터")]
     public ShapeData defaultTurretData;
     [Tooltip("테스트용")]
-    public List<ShapeData> testPerkOptions;
+    public List<PerkData> testPerkOptions;
 
-    private bool _isLevelUpSelectionActive = false; // 레벨업 퍽 선택 창 활성화 판별 플래그
-    private int _equippedShapeCount = 0; // 장착된 도형 카운트
+    private PerkInventory _inventory;
+    // private int equippedCount = 0; // 장착된 도형 카운트 -> 인벤토리 관리로 변경
 
     [Header("레벨, 요구 경험치")]
     [SerializeField] private int level = 1;
@@ -33,6 +33,10 @@ public class PlayerTowerController : MonoBehaviour
     private float _currentHp;
     private Camera _mainCamera;
 
+    void Awake()
+    {
+        _inventory = GetComponent<PerkInventory>();
+    }
     void Start()
     {
         _currentHp = maxHp;
@@ -45,14 +49,7 @@ public class PlayerTowerController : MonoBehaviour
 
     void Update()
     {
-        if (_isLevelUpSelectionActive)
-        {
-            HandlePerkSelection();
-        }
-        else
-        {
-            HandleTurretRotation();
-        }
+        HandleTurretRotation();
     }
 
     public void TakeDamage(float damage)
@@ -85,7 +82,7 @@ public class PlayerTowerController : MonoBehaviour
                 turretFirePoints,
                 defaultTurretData.firingStrategy
             );
-            _equippedShapeCount = 0;
+            // equippedCount = 0;
         }
     }
 
@@ -132,50 +129,69 @@ public class PlayerTowerController : MonoBehaviour
 
         Debug.LogWarning($"레벨 업. 현재 레벨: {level} / 다음 레벨 요구 경험치: {requiredExperience}");
 
-        // 퍽 선택 플래그 온
-        _isLevelUpSelectionActive = true;
         Time.timeScale = 0f; // 게임 시간 정지
 
-        // 임시로 ui 대체 할 디버그 로그
-        Debug.Log("도형 선택 1 2 3 4");
-        for (int i = 0; i < testPerkOptions.Count; i++)
+        UIManager.Instance.ShowPerkSelection(testPerkOptions, this);
+    }
+
+    // private void HandlePerkSelection()
+    // {
+    //     if (Input.GetKeyDown(KeyCode.Alpha1) && testPerkOptions.Count >= 1)      SelectPerk(testPerkOptions[0]);
+    //     else if (Input.GetKeyDown(KeyCode.Alpha2) && testPerkOptions.Count >= 2) SelectPerk(testPerkOptions[1]);
+    //     else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 3) SelectPerk(testPerkOptions[2]);
+    //     else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 4) SelectPerk(testPerkOptions[3]);
+    // }
+
+    public void SelectNApplyPerk(PerkData selectedPerk)
+    {
+        if (selectedPerk is ShapeData shapeData)
         {
-            Debug.Log($"[{i + 1}] {testPerkOptions[i].shapeName}: {testPerkOptions[i].description}");
+            Debug.Log($"{selectedPerk.perkName} 선택");
+
+            if (_inventory.HasPerk(shapeData))
+            {
+                _inventory.LevelUpPerk(shapeData);
+            }
+            else
+            {
+                _inventory.AddPerk(shapeData);
+                EquipNewShape(shapeData);
+            }
         }
-    }
+        else if (selectedPerk is UpgradePerkData upgradePerkData)
+        {
+            Debug.Log($"강화 퍽: {upgradePerkData.perkName} 선택");
+            if (_inventory.HasPerk(upgradePerkData))
+            {
+                _inventory.LevelUpPerk(upgradePerkData);
+            }
+            else
+            {
+                _inventory.AddPerk(upgradePerkData);
+            }
+        }
 
-    private void HandlePerkSelection()
-    {
-        if (Input.GetKeyDown(KeyCode.Alpha1) && testPerkOptions.Count >= 1)      SelectPerk(testPerkOptions[0]);
-        else if (Input.GetKeyDown(KeyCode.Alpha2) && testPerkOptions.Count >= 2) SelectPerk(testPerkOptions[1]);
-        else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 3) SelectPerk(testPerkOptions[2]);
-        else if (Input.GetKeyDown(KeyCode.Alpha3) && testPerkOptions.Count >= 4) SelectPerk(testPerkOptions[3]);
-    }
-
-    private void SelectPerk(ShapeData selectShape)
-    {
-        Debug.Log($"{selectShape.shapeName} 선택");
-        EquipShape(selectShape);
-
-        _isLevelUpSelectionActive = false;
         Time.timeScale = 1f;
     }
 
-    private void EquipShape(ShapeData shapeData)
+    private void EquipNewShape(ShapeData shapeData)
     {
+        // 장착된 도형의 갯수를 인벤토리로 부터 받아옴.
+        int equippedCount = _inventory.GetEquippedShapeCount();
         // 장착가능 슬롯에서 터렛 제외
         int availableSlots = weaponSlots.Count - 1;
         // 장착한 슬롯 확인
-        if (_equippedShapeCount >= availableSlots)
+        if (equippedCount >= availableSlots)
         {
             Debug.LogWarning("무기 슬롯 풀");
             return;
         }
-        int slotIndex = _equippedShapeCount + 1; // 터렛 제외
+        int floorIndex = equippedCount - 1;
+        int slotIndex = floorIndex + 1; // 터렛 제외
         // 빈 슬롯 가져오기
         Transform slot = weaponSlots[slotIndex];
         // 플로어 보너스 가져오기
-        FloorBouns bouns = towerData.floorBouns[_equippedShapeCount];
+        FloorBouns bouns = towerData.floorBouns[floorIndex];
 
         float finalDamage = shapeData.projectileData.damage * bouns.damageMultiplier;
         float finalFireRate = shapeData.fireRate * bouns.fireRateMultiplier;
@@ -221,8 +237,6 @@ public class PlayerTowerController : MonoBehaviour
         }
         // WeaponController에 도형 데이터 추가 및 초기화
         newWeapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, shapeFirePoints, shapeData.firingStrategy);
-        // 장착했으니 슬롯 번호 증가.
-        _equippedShapeCount++;
     }
     void Die()
     {
