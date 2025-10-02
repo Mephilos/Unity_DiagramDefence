@@ -13,20 +13,20 @@ MonoBehaviour:
   m_Name: Default Tower Data
   m_EditorClassIdentifier: 
   towerName: "\uAE30\uBCF8"
-  floorBouns:
+  floorBonuses:
+  - damageMultiplier: 2
+    fireRateMultiplier: 0.5
+    visualScale: 2
+    rotationSpeedMultiplier: 0.5
   - damageMultiplier: 1.5
-    fireRateMultiplier: 0.8
-    visualScale: 1.5
-    rotationSpeedMultiplier: 0.8
-  - damageMultiplier: 1.2
     fireRateMultiplier: 1
-    visualScale: 1.2
-    rotationSpeedMultiplier: -1.2
+    visualScale: 1.5
+    rotationSpeedMultiplier: 1
   - damageMultiplier: 1
-    fireRateMultiplier: 1.2
-    visualScale: 1
-    rotationSpeedMultiplier: 1.6
-  - damageMultiplier: 0.8
     fireRateMultiplier: 1.5
-    visualScale: 0.8
-    rotationSpeedMultiplier: -2
+    visualScale: 1
+    rotationSpeedMultiplier: 1.5
+  - damageMultiplier: 0.5
+    fireRateMultiplier: 2
+    visualScale: 0.5
+    rotationSpeedMultiplier: 2

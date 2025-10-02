@@ -36,7 +36,7 @@ public class EnemySpawner : MonoBehaviour
 
         // 스폰 위치 설정(랜덤)
         Vector2 randomPoint = Random.insideUnitCircle.normalized * spawnRadius;
-        Vector3 spawnPosition = new Vector3(randomPoint.x, 0, randomPoint.y);
+        Vector3 spawnPosition = new Vector3(randomPoint.x, 1, randomPoint.y);
 
         // 적 프리팹 생성
         GameObject enemyObj = Instantiate(enemyToSpawn.enemyPrefab, spawnPosition, Quaternion.identity);

@@ -6,6 +6,8 @@ using Codice.CM.Client.Differences;
 using System.Runtime.InteropServices.WindowsRuntime;
 public class PlayerTowerController : MonoBehaviour
 {
+    private const int PERK_OPTIONS_COUNT = 3;
+
     [Header("타워 설정")]
     public TowerData towerData;
 
@@ -81,7 +83,7 @@ public class PlayerTowerController : MonoBehaviour
         // 터렛 슬롯을 제외한 도형슬롯 갯수
         int shapeSlotCount = weaponSlots.Count - 1;
         // PerkManager에서 선별
-        List<PerkData> options = PerkManager.Instance.GetPerkOptions(3, shapeSlotCount);
+        List<PerkData> options = PerkManager.Instance.GetPerkOptions(PERK_OPTIONS_COUNT, shapeSlotCount);
         // PerkManager에서 걸러진 퍽들을 UIManager로 표시
         UIManager.Instance.ShowPerkSelection(options, this);
     }
@@ -117,7 +119,7 @@ public class PlayerTowerController : MonoBehaviour
         {
             turretWeapon = weaponSlots[0].gameObject.AddComponent<WeaponController>();
         }
-        
+
         List<Transform> turretFirePoints = new List<Transform> { weaponSlots[0] };
 
         // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
@@ -235,7 +237,7 @@ public class PlayerTowerController : MonoBehaviour
         // 장착가능 슬롯에서 터렛 제외
         int availableSlots = weaponSlots.Count - 1;
         // 장착한 슬롯 확인 (슬롯이 풀이면 함수 종료)
-        if (equippedCount > availableSlots)
+        if (equippedCount >= availableSlots)
         {
             Debug.LogWarning("무기 슬롯 풀");
             _inventory.RemovePerk(shapeData);
@@ -243,10 +245,18 @@ public class PlayerTowerController : MonoBehaviour
         }
         int floorIndex = equippedCount - 1;
         int slotIndex = floorIndex + 1; // 터렛 제외
+
+        if (floorIndex >= towerData.floorBonuses.Count)
+        {
+            Debug.LogError($"{floorIndex}층 보너스가 정의 되지 않음.");
+            return;
+        }
+
+
         // 빈 슬롯 가져오기
         Transform slot = weaponSlots[slotIndex];
         // 플로어 보너스 가져오기
-        FloorBouns bouns = towerData.floorBouns[floorIndex];
+        FloorBonus bonus = towerData.floorBonuses[floorIndex];
 
         // 해당 슬롯에 무기의 프리팹을 생성
         if (shapeData.shapePrefab != null)
@@ -254,14 +264,14 @@ public class PlayerTowerController : MonoBehaviour
             GameObject shapeInstance = Instantiate(shapeData.shapePrefab, slot.position, slot.rotation, slot);
 
             shapeInstance.transform.localScale = new Vector3(
-                                                             shapeInstance.transform.localScale.x * bouns.visualScale,
+                                                             shapeInstance.transform.localScale.x * bonus.visualScale,
                                                              shapeInstance.transform.localScale.y,
-                                                             shapeInstance.transform.localScale.z * bouns.visualScale
+                                                             shapeInstance.transform.localScale.z * bonus.visualScale
                                                             );
             // 장착된 도형퍽이 회전 할지 말지 확인 후 회전 작동
             if (shapeData.rotationSpeed != 0f)
             {
-                float finalRotationSpeed = shapeData.rotationSpeed * bouns.rotationSpeedMultiplier * TowerStatManager.Instance.TotalRotationSpeedMultiplier;
+                float finalRotationSpeed = shapeData.rotationSpeed * bonus.rotationSpeedMultiplier * TowerStatManager.Instance.TotalRotationSpeedMultiplier;
                 ShapeRotator rotator = shapeInstance.AddComponent<ShapeRotator>();
                 rotator.Initialize(finalRotationSpeed);
             }
@@ -287,15 +297,20 @@ public class PlayerTowerController : MonoBehaviour
         }
 
         Transform slot = weaponSlots[slotIndex];
+        if (floorIndex >= towerData.floorBonuses.Count)
+        {
+            Debug.LogError($"{gameObject} 정의된 플로어 보너스 수를 오버");
+            return;
+        }
         // 플로어 보너스 가져오기
-        FloorBouns bouns = towerData.floorBouns[floorIndex];
+        FloorBonus bonus = towerData.floorBonuses[floorIndex];
 
         // 레벨업 보너스 계산.
         float levelUpDamageBonus = (shapeStatus.currentLevel - 1) * shapeData.damagePerLevel;
-        float levelUpFireRateBouns = (shapeStatus.currentLevel - 1) * shapeData.fireRatePerLevel;
+        float levelUpFireRatebonus = (shapeStatus.currentLevel - 1) * shapeData.fireRatePerLevel;
         // 최족 스텟 계산(기본 스텟 + 레벨업 보너스) * 플로어 보너스 * 글로벌 스텟 보너스(강화 퍽)
-        float finalDamage = (shapeData.projectileData.damage + levelUpDamageBonus) * bouns.damageMultiplier * TowerStatManager.Instance.TotalDamageMultiplier;
-        float finalFireRate = (shapeData.fireRate + levelUpFireRateBouns) * bouns.fireRateMultiplier * TowerStatManager.Instance.TotalFireRateMultiplier;
+        float finalDamage = (shapeData.projectileData.damage + levelUpDamageBonus) * bonus.damageMultiplier * TowerStatManager.Instance.TotalDamageMultiplier;
+        float finalFireRate = (shapeData.fireRate + levelUpFireRatebonus) * bonus.fireRateMultiplier * TowerStatManager.Instance.TotalFireRateMultiplier;
         // 슬롯에 장착된 도형의 웨폰 컨트롤러 가져움
         WeaponController weapon = slot.GetComponent<WeaponController>();
         if (weapon != null)
