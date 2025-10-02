@@ -1,6 +1,7 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Linq;
+using Codice.Client.Commands;
 
 [System.Serializable]
 public class PerkStatus
@@ -58,7 +59,7 @@ public class PerkInventory : MonoBehaviour
     {
         return ownedPerks.FirstOrDefault(p => p.perkData == perk);
     }
-    // 도형 개수 알려주는 함수
+    //도형 개수 알려주는 함수
     public int GetEquippedShapeCount()
     {
         return equippedShapes.Count;
@@ -69,5 +70,31 @@ public class PerkInventory : MonoBehaviour
     {
         PerkStatus status = GetStatus(shape);
         return status != null && status.currentLevel >= status.perkData.maxLevel;
+    }
+    public bool IsShapeSlotsFull(int maxSlots)
+    {
+        return equippedShapes.Count >= maxSlots;
+    }
+    public List<PerkStatus> GetAllOwnedPerks()
+    {
+        return ownedPerks;
+    }
+
+    public List<PerkStatus> GetEquippedShapes()
+    {
+        return equippedShapes;
+    }
+    // 장착 실패시, 변경시 인벤토리에서 퍽을 제거하기 위한 함수
+    public void RemovePerk(PerkData perkToRemove)
+    {
+        PerkStatus statusToRemove = GetStatus(perkToRemove);
+        if (statusToRemove != null)
+        {
+            ownedPerks.Remove(statusToRemove);
+            if (perkToRemove is ShapeData)
+            {
+                equippedShapes.Remove(statusToRemove);
+            }
+        }
     }
 }

@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b787d5e0b065448db8bb37326b0b96d7, type: 3}
   m_Name: New Upgrade Data 1
   m_EditorClassIdentifier: 
-  perkName: New Perk
+  perkName: Total Damage Up
   description: Perk description
   icon: {fileID: 0}
   maxLevel: 5
+  rarity: 0
   statToUpgrade: 0
-  valuePerLevel: 0
+  valuePerLevel: 0.1
   isPercentage: 0

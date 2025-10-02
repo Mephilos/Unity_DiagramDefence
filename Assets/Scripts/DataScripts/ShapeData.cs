@@ -7,6 +7,10 @@ public class ShapeData : PerkData
     public ProjectileData projectileData;
     public float fireRate = 1f; // 초당 발사 횟수
 
+    [Header("레벨업 성장치")]
+    public float damagePerLevel = 2f;
+    public float fireRatePerLevel = 0.2f;
+
     [Header("발사 타입 데이터")]
     public FiringStrategy firingStrategy;
     [Header("회전 속도")]

@@ -1,5 +1,11 @@
 using UnityEngine;
 
+public enum PerkRarity
+{
+    Common,
+    Rare
+}
+
 // 퍽 추상 클래스
 public abstract class PerkData : ScriptableObject
 {
@@ -9,4 +15,6 @@ public abstract class PerkData : ScriptableObject
     public string description = "Perk description";
     public Sprite icon;
     public int maxLevel = 5;
+
+    public PerkRarity rarity = PerkRarity.Common;
 }
