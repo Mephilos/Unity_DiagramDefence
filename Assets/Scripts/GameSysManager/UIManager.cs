@@ -24,14 +24,21 @@ public class UIManager : MonoBehaviour
     [Header("퍽 카드")]
     public List<PerkCardUI> perkCards;
 
+    [Header("게임 상태 패널")]
+    public GameObject gameOverPanel;
+    public GameObject victoryPanel;
 
     private PlayerTowerController _requestingPlayer;
 
     void Start()
     {
+        // 퍽 선택화면, 승리, 배패 화면 숨기기
         perkSelectionPanel.SetActive(false);
+        victoryPanel.SetActive(false);
+        gameOverPanel.SetActive(false);
     }
 
+    // 퍽 출력 함수
     public void ShowPerkSelection(List<PerkData> options, PlayerTowerController player)
     {
         _requestingPlayer = player;
@@ -58,4 +65,13 @@ public class UIManager : MonoBehaviour
         perkSelectionPanel.SetActive(false);
         _requestingPlayer.SelectNApplyPerk(selectedPerk);
     }
+
+    public void ShowVictoryWindow()
+    {
+        victoryPanel.SetActive(true);
+    }
+    public void ShowGameOverWindow()
+    {
+        gameOverPanel.SetActive(true);
+    }   
 }

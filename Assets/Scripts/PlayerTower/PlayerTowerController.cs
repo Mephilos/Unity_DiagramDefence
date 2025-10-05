@@ -101,8 +101,7 @@ public class PlayerTowerController : MonoBehaviour
 
     void Die()
     {
-        Debug.Log("게임 오버");
-        Destroy(gameObject);
+        GameManager.Instance.EndGame(false); //GameManage isVictory false 인상태
     }
 
     private void InitializeDefaultTurret()
