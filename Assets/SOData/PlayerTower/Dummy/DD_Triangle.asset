@@ -16,10 +16,13 @@ MonoBehaviour:
   description: "\uAE30\uBCF8\uC801\uC778 \uD0C4 \uBC1C\uC0AC\uB97C \uD558\uB294 \uB3C4\uD615\uC785\uB2C8\uB2E4."
   icon: {fileID: 0}
   maxLevel: 5
+  rarity: 0
   projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
   fireRate: 4
+  damagePerLevel: 2
+  fireRatePerLevel: 0.2
   firingStrategy: {fileID: 11400000, guid: 530ddc27d00984990bdd521fafd347d1, type: 2}
   rotationSpeed: 30
-  shapePrefab: {fileID: 8348762225316366691, guid: 1f4ef6fcd22f64520a3432028fd2f78a, type: 3}
+  shapePrefab: {fileID: 2951045859622455992, guid: c64a3a7b2f7e3498c8c1f35f909bb192, type: 3}
   combinationPartner: {fileID: 0}
   combinedPerk: {fileID: 0}

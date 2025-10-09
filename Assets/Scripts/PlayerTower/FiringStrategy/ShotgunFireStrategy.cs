@@ -41,7 +41,7 @@ public class ShotgunFireStrategy : FiringStrategy
                 Projectile projectile = projectileObj.GetComponent<Projectile>();
                 if (projectile != null)
                 {
-                    projectile.Initialize(projectileData, damagePerPellet, finalSpeed);
+                    projectile.Initialize(projectileData, damagePerPellet, finalSpeed, null);
                 }
             }
         }

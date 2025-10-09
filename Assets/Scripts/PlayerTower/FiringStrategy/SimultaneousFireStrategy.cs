@@ -14,7 +14,7 @@ public class SimultaneousFireStrategy : FiringStrategy
             Projectile projectile = projectileObj.GetComponent<Projectile>();
             if (projectile != null)
             {
-                projectile.Initialize(projectileData, finalDamage, projectileData.speed);
+                projectile.Initialize(projectileData, finalDamage, projectileData.speed, null);
             }
         }
     }

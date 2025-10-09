@@ -40,7 +40,12 @@ public class EnemyController : MonoBehaviour
         // 이동 패턴을 전략 패턴으로 관리(MovementStrategy를 상속하여 작성)
         if (_enemyData.movementStrategy != null)
         {
-            _enemyData.movementStrategy.Move(transform, _target, _enemyData.moveSpeed, ref _totalAngleRotated);
+            Vector3 moveDirection = _enemyData.movementStrategy.Move(transform, _target, _enemyData.moveSpeed, ref _totalAngleRotated);
+
+            if (moveDirection != Vector3.zero)
+            {
+                transform.rotation = Quaternion.LookRotation(moveDirection);
+            }
         }
     }
 

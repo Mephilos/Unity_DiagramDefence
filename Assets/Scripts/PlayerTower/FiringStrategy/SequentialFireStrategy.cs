@@ -16,7 +16,7 @@ public class SequentialFireStrategy : FiringStrategy
         if (projectile != null)
         {
             // ProjectileData 값으로 초기화
-            projectile.Initialize(projectileData, finalDamage, projectileData.speed);
+            projectile.Initialize(projectileData, finalDamage, projectileData.speed, null);
         }
         // 다음 발사 위치 인덱스
         nextFirePointIndex++;
