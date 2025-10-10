@@ -9,6 +9,9 @@ public class ProjectileData : ScriptableObject
     public float speed = 20f;
     public float lifetime = 3f;
 
+    [Header("관통 횟수(1이면 일반 투사체)")]
+    public int pierceCount = 1;
+
     [Header("투사체 프리팹")]
     public GameObject projectilePrefab;
 }

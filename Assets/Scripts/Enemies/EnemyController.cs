@@ -7,7 +7,7 @@ public class EnemyController : MonoBehaviour
     private float _currentHp;
     private Transform _target;
 
-    private PlayerTowerController _playerController;
+    private PlayerStatus _playerStatus;
     private float _totalAngleRotated = 0f; // 회전 추적 변수
     public void Initialize(EnemyData data, Transform target)
     {
@@ -15,7 +15,7 @@ public class EnemyController : MonoBehaviour
         _target = target;
         _currentHp = _enemyData.maxHp;
 
-        if (_target != null) _playerController = _target.GetComponent<PlayerTowerController>(); // playerController 캐싱
+        if (_target != null) _playerStatus = _target.GetComponent<PlayerStatus>(); // playerController 캐싱
     }
 
     void Update()
@@ -52,9 +52,9 @@ public class EnemyController : MonoBehaviour
     // 자폭 공격용 매서드
     private void Explode()
     {
-        if (_playerController! != null)
+        if (_playerStatus != null)
         {
-            _playerController.TakeDamage(_enemyData.damage);
+            _playerStatus.TakeDamage(_enemyData.damage);
         }
 
         Destroy(gameObject);
@@ -64,9 +64,9 @@ public class EnemyController : MonoBehaviour
     private void Die()
     {
         // 플레이어 확인후 플레이어 컨트롤러에 경험치 전달
-        if (_playerController != null)
+        if (_playerStatus != null)
         {
-            _playerController.GainExperience(_enemyData.experienceReward);
+            _playerStatus.GainExperience(_enemyData.experienceReward);
         }
         Destroy(gameObject);
     }
@@ -75,9 +75,9 @@ public class EnemyController : MonoBehaviour
     {
         if (other.CompareTag("Player"))
         {
-            if (_playerController != null)
+            if (_playerStatus != null)
             {
-                _playerController.TakeDamage(_enemyData.damage);
+                _playerStatus.TakeDamage(_enemyData.damage);
             }
             Destroy(gameObject);
         }

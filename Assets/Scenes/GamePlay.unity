@@ -1019,6 +1019,9 @@ GameObject:
   - component: {fileID: 795930452}
   - component: {fileID: 795930456}
   - component: {fileID: 795930457}
+  - component: {fileID: 795930460}
+  - component: {fileID: 795930459}
+  - component: {fileID: 795930458}
   m_Layer: 8
   m_Name: PlayerTower
   m_TagString: Player
@@ -1164,6 +1167,53 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ownedPerks: []
   equippedShapes: []
+--- !u!114 &795930458
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795930451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 339fba2d5ca61480b876799ea126cfcd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxHp: 100
+  level: 1
+  currentExperience: 0
+  requiredExperience: 100
+--- !u!114 &795930459
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795930451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 51c70d9d31e30404d86c690594ac2e81, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  turretTransform: {fileID: 687074351}
+  groundLayerMask:
+    serializedVersion: 2
+    m_Bits: 1024
+--- !u!114 &795930460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 795930451}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d2a3430f71824f6c8c240614db01609, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  towerData: {fileID: 11400000, guid: 4819283e0368941079a0562f239926c2, type: 2}
+  weaponSlots: []
+  defaultTurretData: {fileID: 11400000, guid: eac0370aaeb6646cdb492790f46500df, type: 2}
 --- !u!1 &830951329
 GameObject:
   m_ObjectHideFlags: 0
