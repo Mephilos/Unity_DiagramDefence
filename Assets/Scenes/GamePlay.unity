@@ -1138,21 +1138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerData: {fileID: 11400000, guid: 4819283e0368941079a0562f239926c2, type: 2}
-  maxHp: 100
-  turretTransform: {fileID: 687074351}
-  groundLayerMask:
-    serializedVersion: 2
-    m_Bits: 1024
-  weaponSlots:
-  - {fileID: 687074351}
-  - {fileID: 1423568162}
-  - {fileID: 1488881368}
-  - {fileID: 1051529044}
-  - {fileID: 1569501302}
-  defaultTurretData: {fileID: 11400000, guid: eac0370aaeb6646cdb492790f46500df, type: 2}
-  level: 1
-  currentExperience: 0
-  requiredExperience: 100
 --- !u!114 &795930457
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1198,7 +1183,7 @@ MonoBehaviour:
   turretTransform: {fileID: 687074351}
   groundLayerMask:
     serializedVersion: 2
-    m_Bits: 1024
+    m_Bits: 4294967295
 --- !u!114 &795930460
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1212,7 +1197,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   towerData: {fileID: 11400000, guid: 4819283e0368941079a0562f239926c2, type: 2}
-  weaponSlots: []
+  weaponSlots:
+  - {fileID: 687074351}
+  - {fileID: 1569501302}
+  - {fileID: 1051529044}
+  - {fileID: 1488881368}
+  - {fileID: 1423568162}
   defaultTurretData: {fileID: 11400000, guid: eac0370aaeb6646cdb492790f46500df, type: 2}
 --- !u!1 &830951329
 GameObject:

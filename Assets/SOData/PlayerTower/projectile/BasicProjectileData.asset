@@ -16,4 +16,5 @@ MonoBehaviour:
   damage: 10
   speed: 20
   lifetime: 3
+  pierceCount: 1
   projectilePrefab: {fileID: 7767936498651578959, guid: ab3ddcc6b067e4d5db5b0ebb1ac68545, type: 3}

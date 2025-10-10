@@ -6,17 +6,19 @@ public class WeaponController : MonoBehaviour
     private ProjectileData _projectileData;
     private float _finalDamage;
     private float _finalFireRate;
+    private float _finalProjectileSpeed;
     private float _fireCooldown = 0f;
     private List<Transform> _firePoints;
     private FiringStrategy _firingStrategy;
     private int _nextFirePointIndex = 0;
 
     // 도형 데이타 초기화
-    public void Initialize(ProjectileData projectileData, float finalDamage, float finalFireRate, List<Transform> firePoints, FiringStrategy firingStrategy)
+    public void Initialize(ProjectileData projectileData, float finalDamage, float finalFireRate, float finalProjectileSpeed, List<Transform> firePoints, FiringStrategy firingStrategy)
     {
         _projectileData = projectileData;
         _finalDamage = finalDamage;
         _finalFireRate = finalFireRate;
+        
         _fireCooldown = 0f;
         _firingStrategy = firingStrategy;
         _firePoints = firePoints;

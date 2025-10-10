@@ -73,7 +73,7 @@ public class EnemyController : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        if (other.CompareTag("Player"))
+        if (other.CompareTag(ProjectConstants.PLAYER_TAG))
         {
             if (_playerStatus != null)
             {

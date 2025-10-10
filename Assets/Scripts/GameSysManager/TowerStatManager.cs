@@ -13,7 +13,7 @@ public class TowerStatManager : MonoBehaviour
     public float TotalDamageMultiplier { get; private set; } = 1.0f;
     public float TotalFireRateMultiplier { get; private set; } = 1.0f;
     public float TotalRotationSpeedMultiplier { get; private set; } = 1.0f;
-
+    public float TotalProjectileSpeedMultiplier { get; private set; } = 1.0f;
     private PerkInventory _playerInventory;
 
     public void RegisterPlayerInventory(PerkInventory inventory)
@@ -45,6 +45,9 @@ public class TowerStatManager : MonoBehaviour
                         break;
                     case StatType.RotationSpeed:
                         TotalRotationSpeedMultiplier += bounsValue;
+                        break;
+                    case StatType.projectileSpeed:
+                        TotalProjectileSpeedMultiplier += bounsValue;
                         break;
                 }
             }

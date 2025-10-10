@@ -4,7 +4,8 @@ public enum StatType
 {
     Damage,
     FireRate,
-    RotationSpeed
+    RotationSpeed,
+    projectileSpeed
 }
 
 [CreateAssetMenu(fileName = "New Upgrade Data", menuName = "Game Data/Perks/Upgrade Perk")]

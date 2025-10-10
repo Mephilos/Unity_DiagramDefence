@@ -47,6 +47,7 @@ public class ShapeEquipment : MonoBehaviour
             defaultTurretData.projectileData,
             defaultTurretData.projectileData.damage,
             defaultTurretData.fireRate,
+            defaultTurretData.projectileData.speed,
             turretFirePoints,
             defaultTurretData.firingStrategy
         );
@@ -71,12 +72,13 @@ public class ShapeEquipment : MonoBehaviour
             // 최종 터렛 데미지 계산 (기본 터렛 데미지 * 버프 값)
             float finalDamage = defaultTurretData.projectileData.damage * TowerStatManager.Instance.TotalDamageMultiplier;
             float finalFireRate = defaultTurretData.fireRate * TowerStatManager.Instance.TotalFireRateMultiplier;
-
+            float finalProjectileSpeed = defaultTurretData.projectileData.speed * TowerStatManager.Instance.TotalProjectileSpeedMultiplier;
             // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
             turretWeapon.Initialize(
                 defaultTurretData.projectileData,
                 finalDamage,
                 finalFireRate,
+                finalProjectileSpeed,
                 turretWeapon.GetFirePoints(),
                 defaultTurretData.firingStrategy
             );
@@ -168,6 +170,8 @@ public class ShapeEquipment : MonoBehaviour
         // 최족 스텟 계산(기본 스텟 + 레벨업 보너스) * 플로어 보너스 * 글로벌 스텟 보너스(강화 퍽)
         float finalDamage = (shapeData.projectileData.damage + levelUpDamageBonus) * bonus.damageMultiplier * TowerStatManager.Instance.TotalDamageMultiplier;
         float finalFireRate = (shapeData.fireRate + levelUpFireRatebonus) * bonus.fireRateMultiplier * TowerStatManager.Instance.TotalFireRateMultiplier;
+        float finalProjectileSpeed = shapeData.projectileData.speed * TowerStatManager.Instance.TotalProjectileSpeedMultiplier; 
+
         // 슬롯에 장착된 도형의 웨폰 컨트롤러 가져움
         WeaponController weapon = slot.GetComponent<WeaponController>();
         if (weapon != null)
@@ -175,7 +179,7 @@ public class ShapeEquipment : MonoBehaviour
             ShapeInfo shapeInfo = slot.GetComponentInChildren<ShapeInfo>();
             List<Transform> firePoints = shapeInfo.firePoints;
             // 도형 데이터 추가, 데이터 최신 데이터로 초기화
-            weapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, firePoints, shapeData.firingStrategy);
+            weapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, finalProjectileSpeed, firePoints, shapeData.firingStrategy);
         }
     }
 }
