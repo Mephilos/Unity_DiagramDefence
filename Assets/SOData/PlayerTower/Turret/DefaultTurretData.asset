@@ -18,11 +18,11 @@ MonoBehaviour:
   maxLevel: 5
   rarity: 0
   projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
-  fireRate: 4
+  fireRate: 1
   damagePerLevel: 2
   fireRatePerLevel: 0.2
-  firingStrategy: {fileID: 11400000, guid: 6a0f85a74fc2e46a29373d105359aef0, type: 2}
+  firingStrategy: {fileID: 11400000, guid: 530ddc27d00984990bdd521fafd347d1, type: 2}
   rotationSpeed: 0
-  shapePrefab: {fileID: 2457799792631313575, guid: 428b56b1a9f7440feaac941a5c230dfd, type: 3}
+  shapePrefab: {fileID: 0}
   combinationPartner: {fileID: 0}
   combinedPerk: {fileID: 0}

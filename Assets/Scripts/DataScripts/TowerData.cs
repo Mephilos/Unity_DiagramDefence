@@ -15,6 +15,9 @@ public class TowerData : ScriptableObject
     [Header("타워 기본 정보")]
     public string towerName = "기본 4슬롯 타워";
 
+    public int maxShapeSlots = 4;
+    public ShapeData defaultTurretData;
+
     [Header("층별 보너스 정보")]
     public List<FloorBonus> floorBonuses;
 }

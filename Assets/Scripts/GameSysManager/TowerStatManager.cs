@@ -13,7 +13,7 @@ public class TowerStatManager : MonoBehaviour
     public float TotalDamageMultiplier { get; private set; } = 1.0f;
     public float TotalFireRateMultiplier { get; private set; } = 1.0f;
     public float TotalRotationSpeedMultiplier { get; private set; } = 1.0f;
-    public float TotalProjectileSpeedMultiplier { get; private set; } = 1.0f;
+    public int AddPierceCount { get; private set; } = 0; // 투사체 관통 횟수
     private PerkInventory _playerInventory;
 
     public void RegisterPlayerInventory(PerkInventory inventory)
@@ -28,6 +28,7 @@ public class TowerStatManager : MonoBehaviour
         TotalDamageMultiplier = 1.0f;
         TotalFireRateMultiplier = 1.0f;
         TotalRotationSpeedMultiplier = 1.0f;
+        AddPierceCount = 0;
 
         foreach (PerkStatus status in _playerInventory.GetAllOwnedPerks())
         {
@@ -46,8 +47,8 @@ public class TowerStatManager : MonoBehaviour
                     case StatType.RotationSpeed:
                         TotalRotationSpeedMultiplier += bounsValue;
                         break;
-                    case StatType.projectileSpeed:
-                        TotalProjectileSpeedMultiplier += bounsValue;
+                    case StatType.Pierce:
+                        AddPierceCount += (int)bounsValue;
                         break;
                 }
             }

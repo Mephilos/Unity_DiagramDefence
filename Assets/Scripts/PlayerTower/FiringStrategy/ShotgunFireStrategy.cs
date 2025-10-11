@@ -15,7 +15,7 @@ public class ShotgunFireStrategy : FiringStrategy
     {
         return (count > 0) ? totalDamage / count : 0;
     }
-    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex)
+    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex, int addPierce)
     {
         if (firePoints == null || firePoints.Count == 0) return;
 
@@ -38,10 +38,18 @@ public class ShotgunFireStrategy : FiringStrategy
 
                 GameObject projectileObj = Instantiate(projectileData.projectilePrefab, firePoint.position, finalRotation);
 
+                // 최종 관통 횟수 계산
+                int finalPierceCount = projectileData.pierceCount + addPierce;
+                // 관통 옵션이 있고, 생성된 오브젝트에 PierceOpt가 없을 경우 동적으로 붙여줌
+                if (addPierce > 0 && projectileObj.GetComponent<PierceOpt>() == null)
+                {
+                    projectileObj.AddComponent<PierceOpt>();
+                }
+
                 Projectile projectile = projectileObj.GetComponent<Projectile>();
                 if (projectile != null)
                 {
-                    projectile.Initialize(projectileData, damagePerPellet, finalSpeed, null);
+                    projectile.Initialize(projectileData, damagePerPellet, finalSpeed, null, finalPierceCount);
                 }
             }
         }

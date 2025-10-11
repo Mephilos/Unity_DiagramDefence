@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Default Tower Data
   m_EditorClassIdentifier: 
   towerName: "\uAE30\uBCF8"
+  maxShapeSlots: 4
+  defaultTurretData: {fileID: 11400000, guid: eac0370aaeb6646cdb492790f46500df, type: 2}
   floorBonuses:
   - damageMultiplier: 2
     fireRateMultiplier: 0.5

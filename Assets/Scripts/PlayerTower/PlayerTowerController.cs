@@ -9,7 +9,7 @@ public class PlayerTowerController : MonoBehaviour
     private ShapeEquipment _shapeEquipment;
     private PerkInventory _inventory;
 
-    public TowerData towerData;
+    //public TowerData towerData;
 
     void Awake()
     {
@@ -34,8 +34,8 @@ public class PlayerTowerController : MonoBehaviour
     private void OnPlayerLevelUp()
     {
         Time.timeScale = 0f; // 게임 시간 정지
-        // 터렛 슬롯을 제외한 도형슬롯 갯수(ShapeEquipment 참조)
-        int shapeSlotCount = _shapeEquipment.weaponSlots.Count - 1;
+        // towerData <- shapeEquipment를 참조하여 도형 슬롯 값 받아오기
+        int shapeSlotCount = _shapeEquipment.towerData.maxShapeSlots;
         // PerkManager에서 선별
         List<PerkData> options = PerkManager.Instance.GetPerkOptions(PERK_OPTIONS_COUNT, shapeSlotCount);
         // PerkManager에서 걸러진 퍽들을 UIManager로 표시

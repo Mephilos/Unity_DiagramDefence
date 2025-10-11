@@ -10,9 +10,6 @@ public class ShapeEquipment : MonoBehaviour
     [Tooltip("무기 장착 리스트")]
     public List<Transform> weaponSlots;
 
-    [Tooltip("터렛 데이터")]
-    public ShapeData defaultTurretData;
-
     private PerkInventory _inventory;
 
     void Awake()
@@ -27,9 +24,9 @@ public class ShapeEquipment : MonoBehaviour
 
     private void InitializeDefaultTurret()
     {
-        if (weaponSlots.Count == 0 || defaultTurretData == null)
+        if (weaponSlots.Count == 0 || towerData.defaultTurretData == null)
         {
-            Debug.LogError($"{gameObject}터렛 설정 필요");
+            Debug.LogError($"{gameObject}터렛 설정 확인 필요");
             return;
         }
         // 0번슬롯은 터렛 거기에 있는 터렛의 웨폰컨트롤러 가져오기
@@ -44,12 +41,11 @@ public class ShapeEquipment : MonoBehaviour
 
         // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
         turretWeapon.Initialize(
-            defaultTurretData.projectileData,
-            defaultTurretData.projectileData.damage,
-            defaultTurretData.fireRate,
-            defaultTurretData.projectileData.speed,
+            towerData.defaultTurretData.projectileData,
+            towerData.defaultTurretData.projectileData.damage,
+            towerData.defaultTurretData.fireRate,
             turretFirePoints,
-            defaultTurretData.firingStrategy
+            towerData.defaultTurretData.firingStrategy
         );
     }
     public void UpdateAllWeaponStats()
@@ -70,17 +66,16 @@ public class ShapeEquipment : MonoBehaviour
         if (turretWeapon != null)
         {
             // 최종 터렛 데미지 계산 (기본 터렛 데미지 * 버프 값)
-            float finalDamage = defaultTurretData.projectileData.damage * TowerStatManager.Instance.TotalDamageMultiplier;
-            float finalFireRate = defaultTurretData.fireRate * TowerStatManager.Instance.TotalFireRateMultiplier;
-            float finalProjectileSpeed = defaultTurretData.projectileData.speed * TowerStatManager.Instance.TotalProjectileSpeedMultiplier;
+            float finalDamage = towerData.defaultTurretData.projectileData.damage * TowerStatManager.Instance.TotalDamageMultiplier;
+            float finalFireRate = towerData.defaultTurretData.fireRate * TowerStatManager.Instance.TotalFireRateMultiplier;
+            
             // 가져온 웨폰 컨트롤러를 기본 터렛 데이터로 초기화
             turretWeapon.Initialize(
-                defaultTurretData.projectileData,
+                towerData.defaultTurretData.projectileData,
                 finalDamage,
                 finalFireRate,
-                finalProjectileSpeed,
                 turretWeapon.GetFirePoints(),
-                defaultTurretData.firingStrategy
+                towerData.defaultTurretData.firingStrategy
             );
         }
     }
@@ -89,8 +84,8 @@ public class ShapeEquipment : MonoBehaviour
     {
         // 장착된 도형의 갯수를 인벤토리로 부터 받아옴.
         int equippedCount = _inventory.GetEquippedShapeCount();
-        // 장착가능 슬롯에서 터렛 제외
-        int availableSlots = weaponSlots.Count - 1;
+
+        int availableSlots = towerData.maxShapeSlots; // towerData를 참조 하여 슬롯 갯수 가져옴
         // 장착한 슬롯 확인 (슬롯이 풀이면 함수 종료)
         if (equippedCount > availableSlots)
         {
@@ -101,7 +96,7 @@ public class ShapeEquipment : MonoBehaviour
         int floorIndex = equippedCount - 1;
         int slotIndex = floorIndex + 1; // 터렛 제외
 
-        if (floorIndex >= towerData.floorBonuses.Count)
+        if (floorIndex < 0 || floorIndex >= towerData.floorBonuses.Count)
         {
             Debug.LogError($"{floorIndex}층 보너스가 정의 되지 않음.");
             return;
@@ -170,7 +165,6 @@ public class ShapeEquipment : MonoBehaviour
         // 최족 스텟 계산(기본 스텟 + 레벨업 보너스) * 플로어 보너스 * 글로벌 스텟 보너스(강화 퍽)
         float finalDamage = (shapeData.projectileData.damage + levelUpDamageBonus) * bonus.damageMultiplier * TowerStatManager.Instance.TotalDamageMultiplier;
         float finalFireRate = (shapeData.fireRate + levelUpFireRatebonus) * bonus.fireRateMultiplier * TowerStatManager.Instance.TotalFireRateMultiplier;
-        float finalProjectileSpeed = shapeData.projectileData.speed * TowerStatManager.Instance.TotalProjectileSpeedMultiplier; 
 
         // 슬롯에 장착된 도형의 웨폰 컨트롤러 가져움
         WeaponController weapon = slot.GetComponent<WeaponController>();
@@ -179,7 +173,7 @@ public class ShapeEquipment : MonoBehaviour
             ShapeInfo shapeInfo = slot.GetComponentInChildren<ShapeInfo>();
             List<Transform> firePoints = shapeInfo.firePoints;
             // 도형 데이터 추가, 데이터 최신 데이터로 초기화
-            weapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, finalProjectileSpeed, firePoints, shapeData.firingStrategy);
+            weapon.Initialize(shapeData.projectileData, finalDamage, finalFireRate, firePoints, shapeData.firingStrategy);
         }
     }
 }

@@ -8,7 +8,7 @@ public class HomingFireStrategy : FiringStrategy
 
     public LayerMask enemyLayer;
 
-    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex)
+    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex, int addPierce)
     {
         if (firePoints == null || firePoints.Count == 0) return;
 
@@ -17,11 +17,18 @@ public class HomingFireStrategy : FiringStrategy
         Transform target = FindClosestEnemy(currentFirePoint.position);
 
         GameObject projectileObj = Instantiate(projectileData.projectilePrefab, currentFirePoint.position, currentFirePoint.rotation);
+
+        int finalPierceCount = projectileData.pierceCount + addPierce;
+        if (addPierce > 0 && projectileObj.GetComponent<PierceOpt>() == null)
+        {
+            projectileObj.AddComponent<PierceOpt>();
+        }
+        
         Projectile projectile = projectileObj.GetComponent<Projectile>();
 
         if (projectile != null)
         {
-            projectile.Initialize(projectileData, finalDamage, projectileData.speed, target);
+            projectile.Initialize(projectileData, finalDamage, projectileData.speed, target, finalPierceCount);
         }
 
         nextFirePointIndex = (nextFirePointIndex + 1) % firePoints.Count;

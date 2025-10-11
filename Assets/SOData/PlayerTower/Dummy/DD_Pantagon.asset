@@ -12,11 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 095e071db0c564a8291d4246de0aa597, type: 3}
   m_Name: DD_Pantagon
   m_EditorClassIdentifier: 
-  perkName: New Perk
-  description: "\uAE30\uBCF8\uC801\uC778 \uD0C4 \uBC1C\uC0AC\uB97C \uD558\uB294 \uB3C4\uD615\uC785\uB2C8\uB2E4."
+  perkName: Pantagon
+  description: HomingAttack
   icon: {fileID: 0}
   maxLevel: 5
-  rarity: 0
+  rarity: 1
   projectileData: {fileID: 11400000, guid: 08b5b049f02c44b61bac440c0b26f848, type: 2}
   fireRate: 1
   damagePerLevel: 2

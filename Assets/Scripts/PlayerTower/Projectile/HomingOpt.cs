@@ -7,7 +7,7 @@ public class HomingOpt : MonoBehaviour, IProjectile
     private Transform _target;
     private float _turnSpeed = 10f;
 
-    public void Initialize(Projectile projectile, ProjectileData data)
+    public void Initialize(Projectile projectile, int pierceCount)
     {
         _projectile = projectile;
         _target = projectile.Target;
@@ -22,6 +22,6 @@ public class HomingOpt : MonoBehaviour, IProjectile
         _projectile.transform.rotation = Quaternion.Slerp(_projectile.transform.rotation, lookRotation, Time.deltaTime * _turnSpeed);
     }
 
-    public void OnHit(Collider target, ref bool shouldDestroy) { }
+    public void OnValidHit(Collider target, ref bool shouldSurvive) { }
     public bool HasHit(Collider target) { return false; }
 }

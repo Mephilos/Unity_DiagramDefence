@@ -4,17 +4,23 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "Simultaneous Fire Strategy", menuName = "Game Data/Firing Strategies/Simultaneous")]
 public class SimultaneousFireStrategy : FiringStrategy
 {
-    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex)
+    public override void Fire(ProjectileData projectileData, List<Transform> firePoints, float finalDamage, ref int nextFirePointIndex, int addPierce)
     {
         if (firePoints == null) return;
 
         foreach (Transform firePoint in firePoints)
         {
             GameObject projectileObj = Instantiate(projectileData.projectilePrefab, firePoint.position, firePoint.rotation);
+
+            int finalPierceCount = projectileData.pierceCount + addPierce;
+            if (addPierce > 0 && projectileObj.GetComponent<PierceOpt>() == null)
+            {
+                projectileObj.AddComponent<PierceOpt>();
+            }
             Projectile projectile = projectileObj.GetComponent<Projectile>();
             if (projectile != null)
             {
-                projectile.Initialize(projectileData, finalDamage, projectileData.speed, null);
+                projectile.Initialize(projectileData, finalDamage, projectileData.speed, null, finalPierceCount);
             }
         }
     }
