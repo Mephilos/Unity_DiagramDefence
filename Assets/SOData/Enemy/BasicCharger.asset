@@ -18,4 +18,4 @@ MonoBehaviour:
   damage: 5
   enemyPrefab: {fileID: 4369756455478955006, guid: 48b3fd7c90650426eb73c09a7becc7da, type: 3}
   movementStrategy: {fileID: 11400000, guid: 2a931c550ab5b474abaeeceb96db78e5, type: 2}
-  experienceReward: 5
+  experienceReward: 20

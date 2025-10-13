@@ -1,6 +1,5 @@
 using UnityEngine;
 using System.Collections.Generic;
-using JetBrains.Annotations;
 
 [System.Serializable]
 public class EnemyGroup

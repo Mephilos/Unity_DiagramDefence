@@ -15,7 +15,9 @@ MonoBehaviour:
   enemyGroups:
   - enemyData: {fileID: 11400000, guid: 8c10c7d31fce445f5a50123abcede483, type: 2}
     count: 5
-  - enemyData: {fileID: 11400000, guid: 8c10c7d31fce445f5a50123abcede483, type: 2}
+  - enemyData: {fileID: 11400000, guid: 851df3d9713054b3b92ae57984bfc94f, type: 2}
+    count: 5
+  - enemyData: {fileID: 11400000, guid: 851df3d9713054b3b92ae57984bfc94f, type: 2}
     count: 5
   - enemyData: {fileID: 11400000, guid: 851df3d9713054b3b92ae57984bfc94f, type: 2}
     count: 5

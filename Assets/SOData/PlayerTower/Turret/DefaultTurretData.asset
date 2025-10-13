@@ -18,7 +18,7 @@ MonoBehaviour:
   maxLevel: 5
   rarity: 0
   projectileData: {fileID: 11400000, guid: b21af5cf8201c4b06a55652f637bd4b1, type: 2}
-  fireRate: 1
+  fireRate: 2
   damagePerLevel: 2
   fireRatePerLevel: 0.2
   firingStrategy: {fileID: 11400000, guid: 530ddc27d00984990bdd521fafd347d1, type: 2}
